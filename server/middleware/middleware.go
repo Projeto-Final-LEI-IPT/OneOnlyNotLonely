@@ -9,14 +9,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"server/model"
 	"strconv"
+
 )
 
 //DB connection String
-const connectionString ="mongodb+srv://Ninja:CocaCola123@cambadadeidiotas.ks4f6.mongodb.net/ElderLootbox?retryWrites=true&w=majority"
+
+var connectionString =""
 
 const dbName= "velhotesInc"
 
@@ -25,6 +28,11 @@ const colName="box"
 var collection *mongo.Collection
 
 func init(){
+	dat, _ := ioutil.ReadFile("../server/.env")
+
+	connectionString = fmt.Sprintf("%v",string(dat))
+
+	fmt.Println(connectionString)
 
 	//Set client Options
 	clientOptions := options.Client().ApplyURI(connectionString)
@@ -48,6 +56,8 @@ func init(){
 	collection = client.Database(dbName).Collection(colName)
 	fmt.Println("Collection instance Created!")
 }
+
+
 
 //GetAllBox get all box route
 func GetAllBox(w http.ResponseWriter,r *http.Request){
@@ -152,3 +162,8 @@ func deleteAllTask()int64{
 	fmt.Println("Deleted Document",d.DeletedCount)
 	return d.DeletedCount
 }
+
+
+
+
+
