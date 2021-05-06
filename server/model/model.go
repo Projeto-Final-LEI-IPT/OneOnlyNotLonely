@@ -3,11 +3,10 @@ package model
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Box struct {
-	ID primitive.ObjectID `json:"_id,omitempty
-     bson:"_id,omitempty"`
+	ID primitive.ObjectID `json:"_id,omitempty bson:"_id,omitempty"`
+	Status string 	`json"status,omitempty"`
+	Latitude float64	`json:"latitude,omitempty"`
+	Longitude float64 `json:"longitude,omitempty"`
 	Description string  `json:"description,omitempty"`
-	lat float32 `json:"lat,omitempty"`
-	long float32 `json:"long, omitempty"`
-	status string `json"status,omitempty"`
-}
+	}
 

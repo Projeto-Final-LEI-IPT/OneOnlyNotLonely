@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"server/model"
+	"strconv"
 )
 
 //DB connection String
@@ -50,37 +51,49 @@ func init(){
 
 //GetAllBox get all box route
 func GetAllBox(w http.ResponseWriter,r *http.Request){
-	w.Header().Set("Context-type","application/x-www-form.urlencoded")
+	w.Header().Set("Context-type","application/json")
 	w.Header().Set("Access-control-allow-Origin","*")
 	payload:=getAllBox()
 	json.NewEncoder(w).Encode(payload)
 }
 
 func CreateBox(w http.ResponseWriter,r *http.Request){
-	w.Header().Set("Context-Type","application/x-www-form.urlencoded")
+	w.Header().Set("Context-Type","application/form-data")
 	w.Header().Set("Access-Control-Allow-Origin","*")
-	w.Header().Set("Acess-Control-Allow-Methods","POST")
+	w.Header().Set("Access-Control-Allow-Methods","POST")
 	w.Header().Set("Access-Control-Allow-Header","content-type")
 	var box model.Box
-	_=json.NewDecoder(r.Body).Decode(&box)
+	err := r.ParseForm()
+	if err != nil{
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	box.Status=r.FormValue("Status")
+	box.Latitude, _ =strconv.ParseFloat(r.FormValue("Latitude"),64)
+	box.Longitude,_ = strconv.ParseFloat(r.FormValue("Longitude"),64)
+	box.Description=r.FormValue("Description")
+
 	insertOneBox(box)
 	json.NewEncoder(w).Encode(box)
 }
 
+
 func DeleteBox(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Context-Type","application/x-www-form-urlencoded")
 	w.Header().Set("Access-Control-Allow-Origin","*")
-	w.Header().Set("Acess-Control-Allow-Methods","POST")
+	w.Header().Set("Access-Control-Allow-Methods","POST")
 	w.Header().Set("Access-Control-Allow-Header","content-type")
 
 	params := mux.Vars(r)
 	deleteOneTask(params["id"])
 	json.NewEncoder(w).Encode(params["id"])
 }
+
 func DeleteAllBox(w http.ResponseWriter,r *http.Request){
-	w.Header().Set("Context-type","application/x-www-form.urlencoded")
+	w.Header().Set("Context-type","application/x-www-form-urlencoded")
 	w.Header().Set("Access-control-allow-Origin","*")
-	count := deleteAllTaks()
+	count := deleteAllTask()
 	json.NewEncoder(w).Encode(count)
 }
 
@@ -107,14 +120,18 @@ func getAllBox() []primitive.M{
 	return results
 
 }
+
 func insertOneBox(box model.Box){
+		fmt.Println(box)
 		insertResult,err := collection.InsertOne(context.Background(),box)
 
 		if err != nil{
 			log.Fatal(err)
 		}
-		fmt.Println("INserted a Single Record",insertResult.InsertedID)
+		fmt.Println("Inserted a Single Record ",insertResult.InsertedID)
 }
+
+
 func deleteOneTask(box string){
 	fmt.Println(box)
 	id,_ := primitive.ObjectIDFromHex(box)
@@ -125,7 +142,8 @@ func deleteOneTask(box string){
 	}
 	fmt.Println("Deleted Box",d.DeletedCount)
 }
-func deleteAllTaks()int64{
+
+func deleteAllTask()int64{
 	d,err := collection.DeleteMany(context.Background(),bson.D{{}},nil)
 	if err !=nil{
 		log.Fatal(err)
