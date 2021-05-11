@@ -28,11 +28,10 @@ const colName="box"
 var collection *mongo.Collection
 
 func init(){
-	dat, _ := ioutil.ReadFile("../server/.env")
+	dat, _ := ioutil.ReadFile("../server/mongo.env")
 
 	connectionString = fmt.Sprintf("%v",string(dat))
 
-	fmt.Println(connectionString)
 
 	//Set client Options
 	clientOptions := options.Client().ApplyURI(connectionString)
