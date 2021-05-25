@@ -8,7 +8,9 @@ To start frond End
 
 Back end written in GoLang
 to start Back end
+
+  go get
   go run main.go
 
-Database alocated in MongoDB
+Database alocated locally in mySQL to be moved to external db when finished
 
