@@ -1,0 +1,10 @@
+version: 
+services:
+    api:
+        ports:
+            - "6060:6060"
+    client:
+        ports:
+            - "8080:8080"
+volumes: 
+networks:
