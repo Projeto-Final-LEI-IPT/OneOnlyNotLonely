@@ -20,7 +20,7 @@ func Router() *mux.Router {
 	router.HandleFunc("/api/deleteInstitution/{id}", middleware.DeleteInstitution).Methods("DELETE", "OPTIONS")
 	//UtenteRouting
 	router.HandleFunc("/api/utente", middleware.GetAllUtente).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/utentes/{id}", middleware.GetUtente).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/utente/{id}", middleware.GetUtente).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/utente", middleware.CreateUtente).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/deleteUtente/{id}", middleware.DeleteUtente).Methods("DELETE", "OPTIONS")
 	//ActivityRouting
