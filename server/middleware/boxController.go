@@ -13,8 +13,6 @@ import (
 
 var db = config.DbConnect()
 
-
-
 //GetAllBox get all box route
 func GetAllBox(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-type", "application/json")
@@ -46,7 +44,7 @@ func CreateBox(w http.ResponseWriter, r *http.Request) {
 	box.Latitude, _ = strconv.ParseFloat(r.FormValue("Latitude"), 64)
 	box.Longitude, _ = strconv.ParseFloat(r.FormValue("Longitude"), 64)
 	box.Description = r.FormValue("Description")
-
+	box.Theme = r.FormValue("Theme")
 	insertOneBox(box)
 	json.NewEncoder(w).Encode(box)
 }
@@ -62,10 +60,8 @@ func DeleteBox(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(params["id"])
 }
 
-
-
 func getAllBox() []model.Box {
-	var boxes [] model.Box
+	var boxes []model.Box
 	db.Find(&boxes)
 	return boxes
 }
@@ -77,23 +73,21 @@ func getBox(boxId string) model.Box {
 	return box
 }
 
-
 func insertOneBox(box model.Box) {
 	insertedBox := box
 	result := db.Create(&insertedBox)
 	if result.Error != nil {
 		log.Fatal(result.Error.Error())
 	}
-	fmt.Println("Inserted a Single Record:",insertedBox.ID)
+	fmt.Println("Inserted a Single Record:", insertedBox.ID)
 }
 
 func deleteOneBox(box string) {
-	var boxes [] model.Box
+	var boxes []model.Box
 	id, _ := strconv.Atoi(box)
-	d:= db.Delete(&boxes,id)
+	d := db.Delete(&boxes, id)
 	if d.Error != nil {
 		log.Fatal(d.Error.Error())
 	}
 	fmt.Println("Deleted Box", d.RowsAffected)
 }
-

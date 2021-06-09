@@ -10,16 +10,14 @@ import (
 	"strconv"
 )
 
-//db = config.DbConnect()
-
-func GetAllInstitute(w http.ResponseWriter, r *http.Request) {
+func GetAllUtente(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-type", "application/json")
 	w.Header().Set("Access-control-allow-Origin", "*")
-	payload := getAllInstitutions()
+	payload := getAllUtente()
 	json.NewEncoder(w).Encode(payload)
 }
 
-func GetInstitution(w http.ResponseWriter, r *http.Request) {
+func GetUtente(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-type", "application/json")
 	w.Header().Set("Access-control-allow-Origin", "*")
 	params := mux.Vars(r)
@@ -27,7 +25,7 @@ func GetInstitution(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(payload)
 }
 
-func CreateInstitution(w http.ResponseWriter, r *http.Request) {
+func CreateUtente(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "application/form-data")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")
@@ -37,54 +35,55 @@ func CreateInstitution(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	var inst model.Institution
-	inst.Name = r.FormValue("Name")
-	inst.Address = r.FormValue("Address")
-	inst.PostCode = r.FormValue("PostCode")
-	inst.Tipo = r.FormValue("Type")
-	insertOneInstitution(inst)
-	json.NewEncoder(w).Encode(inst)
+	var utente model.OldOne
+	utente.Name = r.FormValue("Name")
+	utente.NumUtente, _ = strconv.Atoi(r.FormValue("NumUtente"))
+	utente.Address = r.FormValue("Address")
+	utente.CodPostal = r.FormValue("PostCode")
+	utente.Level, _ = strconv.Atoi(r.FormValue("Level"))
+	insertOneUtente(utente)
+	json.NewEncoder(w).Encode(utente)
 }
 
-func DeleteInstitution(w http.ResponseWriter, r *http.Request) {
+func DeleteUtente(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")
 	w.Header().Set("Access-Control-Allow-Header", "content-type")
 
 	params := mux.Vars(r)
-	deleteOneInst(params["id"])
+	deleteOneUtente(params["id"])
 	json.NewEncoder(w).Encode(params["id"])
 }
 
-func getAllInstitutions() []model.Institution {
-	var insts []model.Institution
-	db.Find(&insts)
-	return insts
+func getAllUtente() []model.OldOne {
+	var utentes []model.OldOne
+	db.Find(&utentes)
+	return utentes
 }
 
-func getInstitution(instId string) model.Institution {
-	var inst model.Institution
-	boxIdInt, _ := strconv.Atoi(instId)
-	db.Find(&inst, boxIdInt)
-	return inst
+func getUtente(boxId string) model.OldOne {
+	var utente model.OldOne
+	utenteIdInt, _ := strconv.Atoi(boxId)
+	db.Find(&utente, utenteIdInt)
+	return utente
 }
 
-func insertOneInstitution(inst model.Institution) {
-	insertedInst := inst
-	result := db.Create(&insertedInst)
+func insertOneUtente(utente model.OldOne) {
+	insertedUtente := utente
+	result := db.Create(&insertedUtente)
 	if result.Error != nil {
 		log.Fatal(result.Error.Error())
 	}
-	fmt.Println("Inserted a Single Record:", insertedInst.ID)
+	fmt.Println("Inserted a Single Record:", insertedUtente.ID)
 }
 
-func deleteOneInst(instID string) {
-	var insts []model.Institution
-	id, _ := strconv.Atoi(instID)
-	d := db.Delete(&insts, id)
+func deleteOneUtente(utenteID string) {
+	var utentes []model.OldOne
+	id, _ := strconv.Atoi(utenteID)
+	d := db.Delete(&utentes, id)
 	if d.Error != nil {
 		log.Fatal(d.Error.Error())
 	}
-	fmt.Println("Deleted Institution", d.RowsAffected)
+	fmt.Println("Deleted OldOne", d.RowsAffected)
 }
