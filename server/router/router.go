@@ -9,24 +9,25 @@ import (
 func Router() *mux.Router {
 	router := mux.NewRouter()
 	//BoxRouting
-	router.HandleFunc("/api/box", middleware.GetAllBox).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/box/{id}", middleware.GetBox).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/box", middleware.CreateBox).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/deleteBox/{id}", middleware.DeleteBox).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/box", middleware.GetAllBox).Methods("GET", "OPTIONS")
+	router.HandleFunc("/box/{id}", middleware.GetBox).Methods("GET", "OPTIONS")
+	router.HandleFunc("/box/{id}", middleware.UpdateBox).Methods("PUT	", "OPTIONS")
+	router.HandleFunc("/box", middleware.CreateBox).Methods("POST", "OPTIONS")
+	router.HandleFunc("/box/{id}", middleware.DeleteBox).Methods("DELETE", "OPTIONS")
 	//InstitutionRouting
-	router.HandleFunc("/api/institutions", middleware.GetAllInstitute).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/institution/{id}", middleware.GetInstitution).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/institution", middleware.CreateInstitution).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/deleteInstitution/{id}", middleware.DeleteInstitution).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/institutions", middleware.GetAllInstitute).Methods("GET", "OPTIONS")
+	router.HandleFunc("/institution/{id}", middleware.GetInstitution).Methods("GET", "OPTIONS")
+	router.HandleFunc("/institution", middleware.CreateInstitution).Methods("POST", "OPTIONS")
+	router.HandleFunc("/deleteInstitution/{id}", middleware.DeleteInstitution).Methods("DELETE", "OPTIONS")
 	//UtenteRouting
-	router.HandleFunc("/api/utente", middleware.GetAllUtente).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/utente/{id}", middleware.GetUtente).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/utente", middleware.CreateUtente).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/deleteUtente/{id}", middleware.DeleteUtente).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/utente", middleware.GetAllUtente).Methods("GET", "OPTIONS")
+	router.HandleFunc("/utente/{id}", middleware.GetUtente).Methods("GET", "OPTIONS")
+	router.HandleFunc("/utente", middleware.CreateUtente).Methods("POST", "OPTIONS")
+	router.HandleFunc("/deleteUtente/{id}", middleware.DeleteUtente).Methods("DELETE", "OPTIONS")
 	//ActivityRouting
-	router.HandleFunc("/api/activity", middleware.GetAllActivity).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/activity/{id}", middleware.GetActivity).Methods("GET", "OPTIONS")
-	router.HandleFunc("/api/activity", middleware.CreateActivity).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/deleteActivity/{id}", middleware.DeleteActivity).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/activity", middleware.GetAllActivity).Methods("GET", "OPTIONS")
+	router.HandleFunc("/activity/{id}", middleware.GetActivity).Methods("GET", "OPTIONS")
+	router.HandleFunc("/activity", middleware.CreateActivity).Methods("POST", "OPTIONS")
+	router.HandleFunc("/deleteActivity/{id}", middleware.DeleteActivity).Methods("DELETE", "OPTIONS")
 	return router
 }

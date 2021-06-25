@@ -3,6 +3,7 @@ package middleware
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -11,29 +12,57 @@ import (
 	"strconv"
 )
 
-var db = config.DbConnect()
+var db = config.DB
+
+func setupCors(w *http.ResponseWriter,req *http.Request){
+	(*w).Header().Set("Access-Control-Allow-Origin","*")
+	(*w).Header().Set("Access-Control-Allow-Methods","POST ,GET ,OPTIONS ,PUT ,DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+}
+
 
 //GetAllBox get all box route
 func GetAllBox(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Context-type", "application/json")
-	w.Header().Set("Access-control-allow-Origin", "*")
+	setupCors(&w , r)
+	if(*r).Method == "OPTIONS"{
+		return
+	}
 	payload := getAllBox()
 	json.NewEncoder(w).Encode(payload)
 }
 
 func GetBox(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Context-type", "application/json")
-	w.Header().Set("Access-control-allow-Origin", "*")
+	setupCors(&w , r)
+	if(*r).Method == "OPTIONS"{
+		return
+	}
 	params := mux.Vars(r)
 	payload := getBox(params["id"])
 	json.NewEncoder(w).Encode(payload)
 }
 
 func CreateBox(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Context-Type", "application/form-data")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Allow-Header", "content-type")
+	setupCors(&w , r)
+	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
+	if(*r).Method == "OPTIONS"{
+		return
+	}
+
+	var box model.Box
+	_ = json.NewDecoder(r.Body).Decode(&box)
+	fmt.Println(box)
+	insertOneBox(box)
+	json.NewEncoder(w).Encode(box)
+}
+
+func UpdateBox(w http.ResponseWriter, r *http.Request){
+	setupCors(&w , r)
+	if(*r).Method == "OPTIONS"{
+		return
+	}
+
+	params := mux.Vars(r)
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -45,15 +74,17 @@ func CreateBox(w http.ResponseWriter, r *http.Request) {
 	box.Longitude, _ = strconv.ParseFloat(r.FormValue("Longitude"), 64)
 	box.Description = r.FormValue("Description")
 	box.Theme = r.FormValue("Theme")
-	insertOneBox(box)
-	json.NewEncoder(w).Encode(box)
+	updateBox(params["id"],box)
+	json.NewEncoder(w).Encode(params["id"])
 }
 
+
+
 func DeleteBox(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Allow-Header", "content-type")
+	setupCors(&w , r)
+	if(*r).Method == "OPTIONS"{
+		return
+	}
 
 	params := mux.Vars(r)
 	deleteOneBox(params["id"])
@@ -70,6 +101,13 @@ func getBox(boxId string) model.Box {
 	var box model.Box
 	boxIdInt, _ := strconv.Atoi(boxId)
 	db.Find(&box, boxIdInt)
+	return box
+}
+
+func updateBox(boxId string,box model.Box)model.Box{
+	boxIdInt, _ := strconv.Atoi(boxId)
+	db.Find(&box, boxIdInt)
+	db.Save(&box)
 	return box
 }
 
