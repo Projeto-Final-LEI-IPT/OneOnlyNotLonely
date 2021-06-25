@@ -8,6 +8,8 @@ import (
 	"log"
 )
 
+
+
 func DbConnect() *gorm.DB {
 	dat, _ := ioutil.ReadFile("../server/sql.env")
 	connectionString := fmt.Sprintf("%v", string(dat))
@@ -19,3 +21,5 @@ func DbConnect() *gorm.DB {
 	fmt.Println("Connected to db")
 	return db
 }
+
+var DB= DbConnect();

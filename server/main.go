@@ -10,5 +10,5 @@ import (
 func main() {
 	r := router.Router()
 	fmt.Println("Starting server on port 6060...")
-	log.Fatal(http.ListenAndServe(":6060", r))
+	log.Fatal(http.ListenAndServe(":6080", r))
 }
