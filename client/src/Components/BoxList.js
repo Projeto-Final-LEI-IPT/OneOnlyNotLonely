@@ -39,9 +39,9 @@ class BoxList extends Component {
                 size="sm"
                 color="primary"
                 tag={(props) => <Link {...props} />}
-                to={"/box/" + box.oldOne + "/" +box.ID+"/"+box.theme + "/acts"}
+                to={"/box/" + box.ID + "/acts"}
               >
-                Assign
+                Ver Actividades
               </Button>
 
               <Button

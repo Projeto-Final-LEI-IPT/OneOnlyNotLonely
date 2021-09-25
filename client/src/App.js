@@ -8,6 +8,7 @@ import BoxActAssign from './Components/BoxActAssign';
 import Mapa from './Components/Map';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react';
+import assignedActList from './Components/AssignedActList'
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/activity/:id/edit' component={ActEdit} />
           <Route path='/institution/:id/edit' component={InstEdit}/>
           <Route path="/box/:elderid/:boxid/:boxtheme/acts" component={BoxActAssign}/>
+          <Route path ='/box/:boxid/acts' component={assignedActList}/>
         </Switch>
       </Router>
     </div>

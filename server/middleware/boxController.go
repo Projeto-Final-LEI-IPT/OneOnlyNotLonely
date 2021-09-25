@@ -41,6 +41,7 @@ func GetBox(w http.ResponseWriter, r *http.Request) {
 	}
 	params := mux.Vars(r)
 	payload := getBox(params["id"])
+	fmt.Println(payload)
 	_ = json.NewEncoder(w).Encode(payload)
 }
 
@@ -112,9 +113,12 @@ func getBox(boxId string) model.Box {
 
 func getActivityByBox(boxId string) []model.Activity {
 	var act []model.Activity
-	var boxes model.Box
+	var box model.Box
 	boxIdInt, _ := strconv.Atoi(boxId)
-	_ = db.Model(&boxes).Where("ID = ?", boxIdInt).Association("Activity").Find(&act)
+
+	_= db.Find(&box,boxIdInt)
+	_ = db.Model(&box).Association("Activity").Find(&act)
+
 	return act
 }
 
