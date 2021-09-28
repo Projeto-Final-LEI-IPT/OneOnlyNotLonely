@@ -15,7 +15,7 @@ func Router() *mux.Router {
 	router.HandleFunc("/box", middleware.CreateBox).Methods("POST", "OPTIONS")
 	router.HandleFunc("/box/{id}", middleware.DeleteBox).Methods("DELETE", "OPTIONS")
 	router.HandleFunc("/box/{id}/actList",middleware.GetActivityByBox).Methods("GET","OPTIONS")
-		router.HandleFunc("/box/{id}/actList",middleware.AssignActsBox).Methods("POST","OPTIONS")
+	router.HandleFunc("/box/{id}/actList",middleware.AssignActsBox).Methods("POST","OPTIONS")
 	//InstitutionRouting
 	router.HandleFunc("/institution", middleware.GetAllInstitute).Methods("GET", "OPTIONS")
 	router.HandleFunc("/institution/{id}", middleware.GetInstitution).Methods("GET", "OPTIONS")

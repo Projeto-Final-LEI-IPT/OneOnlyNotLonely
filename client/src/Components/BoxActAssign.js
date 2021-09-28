@@ -41,9 +41,17 @@ class boxActAssign extends Component {
 
   async handleChange(evt) {
     let assignedActs = evt.target.value;
-    await this.setState({assignedActs});
+    await this.setState({ assignedActs });
     console.log(this.state.assignedActs);
     this.handleSubmit();
+  }
+
+  async handleCancel(e) {
+    let box = parseInt(this.state.box);
+    let uri = "http://localhost:6080/box/" + box;
+    await fetch(uri, {
+      method: "DELETE",
+    }).then( this.props.history.push("/map"))
   }
 
   render() {
@@ -87,6 +95,9 @@ class boxActAssign extends Component {
           {elder.name} : {elder.level}
           <div className="float-right">
             <Form onSubmit={this.handleSubmit}>
+              <Button color="danger" onClick={this.handleCancel}>
+                Cancel
+              </Button>{" "}
               <Button
                 type="submit"
                 color="success"

@@ -13,7 +13,7 @@ class BoxEdit extends Component {
     longitude: "",
     theme: "",
     dataEntrega: "",
-    dataLevantamento: "",
+    dataLevantamento: null ,
     feedback: "",
     oldOne: 0,
   };
@@ -63,8 +63,8 @@ class BoxEdit extends Component {
       method: item.ID ? "PUT" : "POST",
       body: JSON.stringify(item),
     });
-
-    this.props.history.push("/map");
+    let url= "/box/"+item.oldOne +"/"+ item.ID +"/" + item.theme +"/acts"
+    this.props.history.push(url);
   }
 
   render() {
@@ -85,13 +85,14 @@ class BoxEdit extends Component {
             name="oldOne"
             id="oldOne"
             value={elder.ID}
-            checked={elder.ID === item.oldOne}
+            checked={item.oldOne}
             onChange={this.handleChange}
           />
           <label for="oldOne">
             {" "}
             {elder.ID} : {elder.name}, Nivel: {elder.level}{" "}
           </label>
+          
         </div>
       );
     });
